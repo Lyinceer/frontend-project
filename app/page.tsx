@@ -6,19 +6,18 @@ type Post = {
   id: number;
   title: string;
   content: string;
-  date: string;
+  createdAt: string;
 };
 
 export default function Home() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const loadPosts = () => {
-    const saved = localStorage.getItem("posts");
-    if (saved) {
-      setPosts(JSON.parse(saved));
-    } else {
-      setPosts([]);
+  const loadPosts = async () => {
+    const res = await fetch("/api/posts");
+    if (res.ok) {
+      const data = await res.json();
+      setPosts(data);
     }
   };
 
@@ -56,7 +55,9 @@ export default function Home() {
             <Link href={`/posts/${post.id}`} className="fw-bold text-decoration-none">
               {post.title}
             </Link>
-            <div className="text-muted small">{post.date}</div>
+            <div className="text-muted small">
+              {new Date(post.createdAt).toLocaleDateString("id-ID")}
+            </div>
           </li>
         ))}
       </ul>

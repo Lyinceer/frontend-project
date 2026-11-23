@@ -3,13 +3,6 @@ import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
-type Post = {
-  id: number;
-  title: string;
-  content: string;
-  date: string;
-};
-
 export default function EditPost() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
@@ -17,34 +10,29 @@ export default function EditPost() {
   const [content, setContent] = useState("");
 
   useEffect(() => {
-    const saved = localStorage.getItem("posts");
-    if (saved) {
-      const posts: Post[] = JSON.parse(saved);
-      const found = posts.find((p) => p.id === Number(id));
-      if (found) {
-        setTitle(found.title);
-        setContent(found.content);
-      }
-    }
+    if (!id) return;
+    fetch(`/api/posts/${id}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data) {
+          setTitle(data.title);
+          setContent(data.content);
+        }
+      });
   }, [id]);
 
-  const handleUpdate = (e: React.FormEvent) => {
+  const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !content.trim()) return alert("All fields are required!");
 
-    const saved = localStorage.getItem("posts");
-    if (!saved) return;
-
-    const posts: Post[] = JSON.parse(saved);
-    const updatedPosts = posts.map((p) => {
-      if (p.id === Number(id)) {
-        return { ...p, title, content };
-      }
-      return p;
+    await fetch(`/api/posts/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title, content }),
     });
 
-    localStorage.setItem("posts", JSON.stringify(updatedPosts));
     router.push(`/posts/${id}`);
+    router.refresh();
   };
 
   return (

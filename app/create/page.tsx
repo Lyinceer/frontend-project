@@ -3,35 +3,23 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-type Post = {
-  id: number;
-  title: string;
-  content: string;
-  date: string;
-};
-
 export default function CreatePost() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !content.trim()) return alert("All fields are required!");
 
-    const newPost: Post = {
-      id: Date.now(),
-      title,
-      content,
-      date: new Date().toLocaleDateString("en-GB"), // dd/mm/yyyy
-    };
-
-    const saved = localStorage.getItem("posts");
-    const posts = saved ? JSON.parse(saved) : [];
-    posts.push(newPost);
-    localStorage.setItem("posts", JSON.stringify(posts));
+    await fetch("/api/posts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title, content }),
+    });
 
     router.push("/");
+    router.refresh();
   };
 
   return (
