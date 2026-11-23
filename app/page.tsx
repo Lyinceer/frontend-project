@@ -1,69 +1,65 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+import { useState, useEffect } from "react";
+import Link from "next/link";
+
+type Post = {
+  id: number;
+  title: string;
+  content: string;
+  date: string;
+};
 
 export default function Home() {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const loadPosts = () => {
+    const saved = localStorage.getItem("posts");
+    if (saved) {
+      setPosts(JSON.parse(saved));
+    } else {
+      setPosts([]);
+    }
+  };
+
+  useEffect(() => {
+    loadPosts();
+  }, []);
+
+  const filteredPosts = posts.filter((post) =>
+    post.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div className="container py-4">
+      <h1 className="mb-4">My Professional Blog</h1>
+
+      <Link href="/create" className="btn btn-primary mb-3">
+        + Create New Post
+      </Link>
+
+      <div className="mb-3">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search by title..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <div className={styles.intro}>
-          <h1>
-            To get started, edit the{" "}
-            <code className={styles.code}>page.tsx</code> file.
-          </h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </div>
+
+      {posts.length === 0 && <p>No posts yet.</p>}
+
+      <ul className="list-group">
+        {filteredPosts.map((post) => (
+          <li key={post.id} className="list-group-item">
+            <Link href={`/posts/${post.id}`} className="fw-bold text-decoration-none">
+              {post.title}
+            </Link>
+            <div className="text-muted small">{post.date}</div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

@@ -1,13 +1,12 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #f5f1ea;
+  --foreground: #181411;
+  --surface: #fffdf9;
+  --surface-strong: #efe6dd;
+  --border: rgba(24, 20, 17, 0.08);
+  --muted: #685e56;
+  --shadow: rgba(24, 20, 17, 0.08);
+  --accent: #8d5e3b;
 }
 
 html {
@@ -25,16 +24,14 @@ body {
   display: flex;
   flex-direction: column;
   color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(180deg, #f8f4ef 0%, #f1ece7 100%);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 * {
   box-sizing: border-box;
-  padding: 0;
-  margin: 0;
 }
 
 a {
@@ -42,8 +39,213 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+.app-body {
+  min-height: 100vh;
+}
+
+.blog-shell {
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1160px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: var(--surface-strong);
+  color: var(--accent);
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.1rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.nav-links a {
+  transition: opacity 0.2s ease;
+}
+
+.nav-links a:hover {
+  opacity: 0.8;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.hero {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(239, 230, 221, 0.92));
+  border: 1px solid var(--border);
+}
+
+.hero h1 {
+  margin-top: 0.85rem;
+  font-size: clamp(2.3rem, 5vw, 4.2rem);
+  line-height: 1.05;
+  letter-spacing: -0.06em;
+  max-width: 620px;
+}
+
+.hero p {
+  max-width: 620px;
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.section-header {
+  gap: 1rem;
+}
+
+.post-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.post-card {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--border) !important;
+  box-shadow: 0 16px 30px var(--shadow) !important;
+}
+
+.post-card .card-title {
+  font-size: 1.65rem;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+}
+
+.post-card .card-text {
+  color: var(--muted) !important;
+  line-height: 1.7;
+}
+
+.post-meta,
+.post-meta-detail,
+.author {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.read-more {
+  color: var(--foreground);
+  font-weight: 700;
+}
+
+.post-detail {
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid var(--border);
+}
+
+.post-detail h1 {
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  letter-spacing: -0.05em;
+  margin-bottom: 0.75rem;
+}
+
+.lead {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+.post-content {
+  max-width: 760px;
+  color: var(--foreground);
+  font-size: 1.08rem;
+  line-height: 1.9;
+}
+
+.post-content p {
+  margin-bottom: 1.2rem;
+}
+
+.form-control {
+  border-radius: 0.85rem;
+  border-color: rgba(24, 20, 17, 0.12);
+  background: rgba(255, 255, 255, 0.8);
+  padding: 0.85rem 1rem;
+  box-shadow: none;
+}
+
+.form-control:focus {
+  border-color: rgba(141, 94, 59, 0.5);
+  box-shadow: 0 0 0 0.25rem rgba(141, 94, 59, 0.12);
+}
+
+.btn {
+  border-radius: 999px;
+  padding: 0.7rem 1.4rem;
+  font-weight: 700;
+}
+
+.btn-primary {
+  background: var(--foreground);
+  border-color: var(--foreground);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background: #2f241e;
+  border-color: #2f241e;
+}
+
+.btn-outline-secondary {
+  border-color: rgba(24, 20, 17, 0.15);
+  color: var(--foreground);
+}
+
+@media (max-width: 767px) {
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .nav-links {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .hero .card-body,
+  .post-detail .card-body {
+    padding: 1.5rem !important;
   }
 }
